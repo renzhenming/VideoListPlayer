@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/8c74fa22c7e564263be04ea62a5a212b5733f29a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_da4870e81065c458cc159b281776de3569f8c6fc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/3c18246ed1dfdc4a05ecd1ae98518dc340a3913a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_7f2fe27e397b70c00531c9b2bf130d8e60080ef8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/0ed3cfd1b4174e580d88cf0d831c601aa245365a/output/jars/libs/internal_impl-23.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/internal_impl-23.2.1_39f44fbed494c1c22228ef260875c057ad335c8b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.6.0/98476622f10715998eacf9240d6b479f12c66143/okio-1.6.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/okio-1.6.0_0c16a32d8ff6940b06613eb2df05c0e3684f74a6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_9c8270b377babf4066c195f75623cd7e6f689d2d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/Downloads/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/support-annotations-23.2.1_8ad7791bd8efe9b91235f42f8b81fb321c404287.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.2.0/f7873a2ebde246a45c2a8d6f3247108b4c88a879/okhttp-3.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/okhttp-3.2.0_86a190e4fcec389dd4e83284be643702ff6bb548.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/glide/3.7.0/9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4/glide-3.7.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/glide-3.7.0_401b4e12b231a449722c81c391f6d2b0bf8e47f8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/a9c00b7536b97e04bd1cd1ff6dede6c3af1f824f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_3b0a6a59348e9c44d5b33c05e528bd418e580f7c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/c0e821a0ffb9138d4ba6b342bc6c12d6a3d26441/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e3885783ff8926ed9e2fdcd16816c2e1e73e7aee">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_f20500820734baeef94bbd8aec30df6786d1d212.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/0ed3cfd1b4174e580d88cf0d831c601aa245365a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_c0746c96c054b7baa35a11e6e8905926745a1ddd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.android/build-cache/838e26888fed2989ee6ac42f8a1501e837ba7c35/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="bf3c6cdf3e1aa3b54debc3026480fcdf1e506df5">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_fa15173fc456c7caa6e56e20c43215b9f57a4f71.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/Desktop/VideoListPlayer-master/video-list-player/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="86e1c487f103885f2261e682fc486ed2461da093">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/classes_266448e39663f21951654cf6d67fd4573be8abb6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/renzhenming/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/okhttp3-integration/1.4.0/c3ba09441cbb424b2af4eec11124f064bc3c1eff/okhttp3-integration-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c3ba09441cbb424b2af4eec11124f064bc3c1eff">
+        <dex dex="/Users/renzhenming/Desktop/VideoListPlayer-master/app/build/intermediates/pre-dexed/debug/okhttp3-integration-1.4.0_355c18e51e93c4a212372c9d4e83ec02b6ec1d01.jar" />
+    </item>
+
+</items>

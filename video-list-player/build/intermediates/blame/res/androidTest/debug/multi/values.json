@@ -1,0 +1,102 @@
+[
+    {
+        "outputFile": "/Users/renzhenming/Desktop/VideoListPlayer-master/video-list-player/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 1704,
+                    "endColumn": 74,
+                    "endOffset": 1774
+                },
+                "from": {
+                    "file": "/Users/renzhenming/.android/build-cache/c0e821a0ffb9138d4ba6b342bc6c12d6a3d26441/output/res/values/values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 327,
+                        "endColumn": 74,
+                        "endOffset": 397
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 1779,
+                    "endColumn": 75,
+                    "endOffset": 1850
+                },
+                "from": {
+                    "file": "/Users/renzhenming/.android/build-cache/c0e821a0ffb9138d4ba6b342bc6c12d6a3d26441/output/res/values/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 402,
+                        "endColumn": 75,
+                        "endOffset": 473
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 1855,
+                    "endColumn": 71,
+                    "endOffset": 1922
+                },
+                "from": {
+                    "file": "/Users/renzhenming/.android/build-cache/c0e821a0ffb9138d4ba6b342bc6c12d6a3d26441/output/res/values/values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 478,
+                        "endColumn": 71,
+                        "endOffset": 545
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 1927,
+                    "endColumn": 65,
+                    "endOffset": 1988
+                },
+                "from": {
+                    "file": "/Users/renzhenming/.android/build-cache/c0e821a0ffb9138d4ba6b342bc6c12d6a3d26441/output/res/values/values.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 550,
+                        "endColumn": 65,
+                        "endOffset": 611
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 1993,
+                    "endColumn": 46,
+                    "endOffset": 2035
+                },
+                "from": {
+                    "file": "/Users/renzhenming/Desktop/VideoListPlayer-master/video-list-player/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 34,
+                        "startColumn": 4,
+                        "startOffset": 1432,
+                        "endColumn": 46,
+                        "endOffset": 1474
+                    }
+                }
+            }
+        ]
+    }
+]
