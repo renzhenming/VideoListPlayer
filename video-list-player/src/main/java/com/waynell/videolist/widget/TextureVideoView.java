@@ -2,7 +2,9 @@ package com.waynell.videolist.widget;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
@@ -17,14 +19,17 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
+import android.widget.RelativeLayout;
 
 import com.waynell.videolist.BuildConfig;
 import com.waynell.videolist.R;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * This is player implementation based on {@link TextureView}
@@ -47,14 +52,14 @@ public class TextureVideoView extends TextureView
     private static final boolean SHOW_LOGS = BuildConfig.DEBUG;
 
     private volatile int mCurrentState = STATE_IDLE;
-    private volatile int mTargetState  = STATE_IDLE;
+    private volatile int mTargetState = STATE_IDLE;
 
-    private static final int STATE_ERROR              = -1;
-    private static final int STATE_IDLE               = 0;
-    private static final int STATE_PREPARING          = 1;
-    private static final int STATE_PREPARED           = 2;
-    private static final int STATE_PLAYING            = 3;
-    private static final int STATE_PAUSED             = 4;
+    private static final int STATE_ERROR = -1;
+    private static final int STATE_IDLE = 0;
+    private static final int STATE_PREPARING = 1;
+    private static final int STATE_PREPARED = 2;
+    private static final int STATE_PLAYING = 3;
+    private static final int STATE_PAUSED = 4;
     private static final int STATE_PLAYBACK_COMPLETED = 5;
 
     private static final int MSG_START = 0x0001;
@@ -77,17 +82,22 @@ public class TextureVideoView extends TextureView
     private ScaleType mScaleType = ScaleType.NONE;
 
     private static final HandlerThread sThread = new HandlerThread("VideoPlayThread");
+
     static {
         sThread.start();
     }
 
     public interface MediaPlayerCallback {
         void onPrepared(MediaPlayer mp);
+
         void onCompletion(MediaPlayer mp);
+
         void onBufferingUpdate(MediaPlayer mp, int percent);
+
         void onVideoSizeChanged(MediaPlayer mp, int width, int height);
 
         boolean onInfo(MediaPlayer mp, int what, int extra);
+
         boolean onError(MediaPlayer mp, int what, int extra);
     }
 
@@ -174,10 +184,9 @@ public class TextureVideoView extends TextureView
             return;
         }
 
-        if(Looper.myLooper() == Looper.getMainLooper()) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             setTransform(matrix);
-        }
-        else {
+        } else {
             mHandler.postAtFrontOfQueue(new Runnable() {
                 @Override
                 public void run() {
@@ -193,25 +202,25 @@ public class TextureVideoView extends TextureView
             switch (msg.what) {
 
                 case MSG_START:
-                    if(SHOW_LOGS) Log.i(TAG, "<< handleMessage init");
+                    if (SHOW_LOGS) Log.i(TAG, "<< handleMessage init");
                     openVideo();
-                    if(SHOW_LOGS) Log.i(TAG, ">> handleMessage init");
+                    if (SHOW_LOGS) Log.i(TAG, ">> handleMessage init");
                     break;
 
 
                 case MSG_PAUSE:
-                    if(SHOW_LOGS) Log.i(TAG, "<< handleMessage pause");
-                    if(mMediaPlayer != null) {
+                    if (SHOW_LOGS) Log.i(TAG, "<< handleMessage pause");
+                    if (mMediaPlayer != null) {
                         mMediaPlayer.pause();
                     }
                     mCurrentState = STATE_PAUSED;
-                    if(SHOW_LOGS) Log.i(TAG, ">> handleMessage pause");
+                    if (SHOW_LOGS) Log.i(TAG, ">> handleMessage pause");
                     break;
 
                 case MSG_STOP:
-                    if(SHOW_LOGS) Log.i(TAG, "<< handleMessage stop");
+                    if (SHOW_LOGS) Log.i(TAG, "<< handleMessage stop");
                     release(true);
-                    if(SHOW_LOGS) Log.i(TAG, ">> handleMessage stop");
+                    if (SHOW_LOGS) Log.i(TAG, ">> handleMessage stop");
                     break;
 
             }
@@ -220,7 +229,7 @@ public class TextureVideoView extends TextureView
     }
 
     private void init() {
-        if(!isInEditMode()) {
+        if (!isInEditMode()) {
             mContext = getContext();
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
@@ -239,7 +248,7 @@ public class TextureVideoView extends TextureView
             mMediaPlayer = null;
             mCurrentState = STATE_IDLE;
             if (cleartargetstate) {
-                mTargetState  = STATE_IDLE;
+                mTargetState = STATE_IDLE;
             }
 //            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 //            am.abandonAudioFocus(null);
@@ -279,7 +288,7 @@ public class TextureVideoView extends TextureView
             mTargetState = STATE_PREPARING;
 
             mHasAudio = true;
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 try {
                     MediaExtractor mediaExtractor = new MediaExtractor();
                     mediaExtractor.setDataSource(mContext, mUri, null);
@@ -298,14 +307,14 @@ public class TextureVideoView extends TextureView
             }
 
         } catch (IOException | IllegalArgumentException ex) {
-            if(SHOW_LOGS) Log.w(TAG, "Unable to open content: " + mUri, ex);
+            if (SHOW_LOGS) Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
             if (mMediaPlayerCallback != null) {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(mMediaPlayerCallback != null) {
+                        if (mMediaPlayerCallback != null) {
                             mMediaPlayerCallback.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
                         }
                     }
@@ -317,8 +326,8 @@ public class TextureVideoView extends TextureView
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mSurface = new Surface(surface);
-        if(mTargetState == STATE_PLAYING) {
-            if(SHOW_LOGS) Log.i(TAG, "onSurfaceTextureAvailable start");
+        if (mTargetState == STATE_PLAYING) {
+            if (SHOW_LOGS) Log.i(TAG, "onSurfaceTextureAvailable start");
             start();
         }
     }
@@ -345,7 +354,7 @@ public class TextureVideoView extends TextureView
     }
 
     public void setVideoURI(Uri uri) {
-        if(SHOW_LOGS) Log.i(TAG, "setVideoURI " + uri.toString());
+        if (SHOW_LOGS) Log.i(TAG, "setVideoURI " + uri.toString());
         mUri = uri;
     }
 
@@ -356,7 +365,7 @@ public class TextureVideoView extends TextureView
             mVideoHandler.obtainMessage(MSG_STOP).sendToTarget();
         }
 
-        if(mUri != null && mSurface != null) {
+        if (mUri != null && mSurface != null) {
             mVideoHandler.obtainMessage(MSG_START).sendToTarget();
         }
     }
@@ -380,7 +389,7 @@ public class TextureVideoView extends TextureView
     public void stop() {
         mTargetState = STATE_PLAYBACK_COMPLETED;
 
-        if(isInPlaybackState()) {
+        if (isInPlaybackState()) {
             mVideoHandler.obtainMessage(MSG_STOP).sendToTarget();
         }
     }
@@ -390,7 +399,7 @@ public class TextureVideoView extends TextureView
     }
 
     public void mute() {
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.setVolume(0, 0);
             mSoundMute = true;
         }
@@ -430,7 +439,7 @@ public class TextureVideoView extends TextureView
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mMediaPlayerCallback != null) {
+                    if (mMediaPlayerCallback != null) {
                         mMediaPlayerCallback.onCompletion(mp);
                     }
                 }
@@ -440,25 +449,26 @@ public class TextureVideoView extends TextureView
 
     @Override
     public boolean onError(final MediaPlayer mp, final int what, final int extra) {
-        if(SHOW_LOGS) Log.e(TAG, "onError() called with " + "mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
+        if (SHOW_LOGS)
+            Log.e(TAG, "onError() called with " + "mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
         mCurrentState = STATE_ERROR;
         mTargetState = STATE_ERROR;
         if (mMediaPlayerCallback != null) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mMediaPlayerCallback != null) {
+                    if (mMediaPlayerCallback != null) {
                         mMediaPlayerCallback.onError(mp, what, extra);
                     }
                 }
             });
         }
-        return true ;
+        return true;
     }
 
     @Override
     public void onPrepared(final MediaPlayer mp) {
-        if(SHOW_LOGS) Log.i(TAG, "onPrepared " + mUri.toString());
+        if (SHOW_LOGS) Log.i(TAG, "onPrepared " + mUri.toString());
         if (mTargetState != STATE_PREPARING || mCurrentState != STATE_PREPARING) {
             return;
         }
@@ -475,7 +485,7 @@ public class TextureVideoView extends TextureView
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mMediaPlayerCallback != null) {
+                    if (mMediaPlayerCallback != null) {
                         mMediaPlayerCallback.onPrepared(mp);
                     }
                 }
@@ -485,16 +495,81 @@ public class TextureVideoView extends TextureView
 
     @Override
     public void onVideoSizeChanged(final MediaPlayer mp, final int width, final int height) {
-        scaleVideoSize(width, height);
-        if (mMediaPlayerCallback != null) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(mMediaPlayerCallback != null) {
-                        mMediaPlayerCallback.onVideoSizeChanged(mp, width, height);
-                    }
-                }
-            });
+//        scaleVideoSize(width, height);
+//        if (mMediaPlayerCallback != null) {
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(mMediaPlayerCallback != null) {
+//                        mMediaPlayerCallback.onVideoSizeChanged(mp, width, height);
+//                    }
+//                }
+//            });
+//        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                newVideoSizeChangedMethod(mp, width, height);
+            }
+        },1000);
+
+    }
+
+    private boolean mIsVideoSizeKnown;
+    private int mVideoHeight;
+    private int mVideoWidth;
+    private int mSurfaceViewWidth;
+    private int mSurfaceViewHeight;
+
+    private void newVideoSizeChangedMethod(final MediaPlayer mp, final int width, final int height) {
+        if (width == 0 || height == 0) {
+            return;
+        }
+        mIsVideoSizeKnown = true;
+        mVideoHeight = height;
+        mVideoWidth = width;
+        if (mMediaPlayer == null){
+            return;
+        }
+        int wid = mMediaPlayer.getVideoWidth();
+        int hig = mMediaPlayer.getVideoHeight();
+        // 根据视频的属性调整其显示的模式
+
+        if (wid > hig) {
+            if (((Activity) getContext()).getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        } else {
+            if (((Activity) getContext()).getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+        DisplayMetrics dm = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        mSurfaceViewWidth = dm.widthPixels;
+        mSurfaceViewHeight = dm.heightPixels;
+        if (width > height) {
+            // 竖屏录制的视频，调节其上下的空余
+
+            int w = mSurfaceViewHeight * width / height;
+            int margin = (mSurfaceViewWidth - w) / 2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(margin, 0, margin, 0);
+            //mSurfaceView.setLayoutParams(lp);
+            setLayoutParams(lp);
+        } else {
+            // 横屏录制的视频，调节其左右的空余
+
+            int h = mSurfaceViewWidth * height / width;
+            int margin = (mSurfaceViewHeight - h) / 2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(0, margin, 0, margin);
+            //mSurfaceView.setLayoutParams(lp);
+            setLayoutParams(lp);
         }
     }
 
@@ -504,7 +579,7 @@ public class TextureVideoView extends TextureView
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mMediaPlayerCallback != null) {
+                    if (mMediaPlayerCallback != null) {
                         mMediaPlayerCallback.onBufferingUpdate(mp, percent);
                     }
                 }
@@ -518,7 +593,7 @@ public class TextureVideoView extends TextureView
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(mMediaPlayerCallback != null) {
+                    if (mMediaPlayerCallback != null) {
                         mMediaPlayerCallback.onInfo(mp, what, extra);
                     }
                 }

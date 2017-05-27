@@ -52,6 +52,8 @@ public abstract class BaseItemsVisibilityCalculator implements ListItemsVisibili
         }
     }
 
+
+
     public abstract void onStateLost();
 
     protected abstract void onStateTouchScroll(ItemsPositionGetter itemsPositionGetter);

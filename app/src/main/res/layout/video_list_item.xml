@@ -7,12 +7,13 @@
     android:background="#000000"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
         <com.waynell.videolist.widget.TextureVideoView
             android:id="@+id/video_view"
+            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:scaleType="fitCenter"/>
@@ -25,6 +26,7 @@
         <ProgressBar
             android:layout_width="50dp"
             android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:id="@+id/video_progress"
             android:visibility="invisible"
             android:layout_height="50dp" />
@@ -39,13 +41,6 @@
             <!--app:cpb_background_progressbar_width="10dp"-->
             <!--app:cpb_progressbar_color="@color/colorPrimary"-->
             <!--app:cpb_progressbar_width="10dp" />-->
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/video_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:textSize="16sp"/>
+    <!--</FrameLayout>-->
 
 </RelativeLayout>

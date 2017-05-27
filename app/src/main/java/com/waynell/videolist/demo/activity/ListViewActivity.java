@@ -118,7 +118,7 @@ public class ListViewActivity extends AppCompatActivity {
             BaseViewHolder holder;
 
             if (convertView == null) {
-                holder = ViewHolderFactory.buildViewHolder(parent, getItemViewType(position));
+                holder = ViewHolderFactory.buildViewHolder(parent, getItemViewType(position),-1);
                 convertView = holder.itemView;
                 convertView.setTag(holder);
             }

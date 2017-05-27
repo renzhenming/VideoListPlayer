@@ -38,8 +38,8 @@ public class VideoViewHolder extends BaseViewHolder<VideoItem>
     @Bind(R.id.video_view)
     public TextureVideoView videoView;
 
-    @Bind(R.id.video_text)
-    public TextView videoTitle;
+//    @Bind(R.id.video_text)
+//    public TextView videoTitle;
 
     @Bind(R.id.video_cover)
     public ImageView videoCover;

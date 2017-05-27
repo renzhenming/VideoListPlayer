@@ -1,15 +1,23 @@
 package com.waynell.videolist.demo.activity;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.waynell.videolist.demo.R;
 import com.waynell.videolist.demo.holder.BaseViewHolder;
@@ -43,6 +51,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
     private int startY;
     //当前可见条目
     private int mCurrentVisibleItemPosition;
+    private MyAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +61,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_recycler_view);
         ButterKnife.bind(this);
 
-        final MyAdapter adapter = new MyAdapter();
+        adapter = new MyAdapter();
         mLayoutManager = new ControllRateLinearLayoutManager(this);
         mLayoutManager.setSpeedSlow();
         mCalculator = new SingleListViewItemActiveCalculator(adapter,
@@ -77,7 +86,6 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
                 mCalculator.onScrolled(mScrollState);
             }
         });
-
         mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -116,6 +124,19 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCalculator.onScrolled(AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
+                mCalculator.onScrollStateIdle();
+            }
+        },1000);
 
     }
 
@@ -158,6 +179,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
             implements ItemsProvider {
 
         private List<? extends BaseItem> mListItems;
+        private int heightPixels = -1;
 
         public MyAdapter() {
             mListItems = ItemUtils.generateMockData();
@@ -165,7 +187,9 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
 
         @Override
         public BaseViewHolder<? extends BaseItem> onCreateViewHolder(ViewGroup parent, int viewType) {
-            return ViewHolderFactory.buildViewHolder(parent, viewType);
+            if (heightPixels == -1)
+                heightPixels = getResources().getDisplayMetrics().heightPixels;
+            return ViewHolderFactory.buildViewHolder(parent, viewType,heightPixels);
         }
 
         @SuppressWarnings("unchecked")
@@ -198,5 +222,101 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
         public int listItemSize() {
             return getItemCount();
         }
+
+        public void setScreenHeight(int heightPixels) {
+            this.heightPixels = heightPixels;
+        }
     }
+    /* *
+     * 通过API动态改变当前屏幕的显示方向
+     */
+    public void apiChangeOrientation() {
+        // 取得当前屏幕方向
+        int orient = getRequestedOrientation();
+        // 若非明确的landscape或portrait时 再透过宽高比例的方法来确认实际显示方向
+        // 这会保证orient最终值会是明确的横屏landscape或竖屏portrait
+        if (orient != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                && orient != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            //宽>高为横屏,反正为竖屏
+            //int[] size = MyUtils.getDisplaySize(this);
+            int heightPixels = getResources().getDisplayMetrics().heightPixels;
+            int widthPixels = getResources().getDisplayMetrics().widthPixels;
+            orient = widthPixels > heightPixels ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        }
+        if (orient == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+//        @Override
+//    protected void onResume() {
+//        mOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
+//        this.setRequestedOrientation(mOrientation);
+//        Display display = getWindowManager().getDefaultDisplay();
+//        int width = display.getWidth();
+//        int height = display.getHeight();
+//        if (width > height) {
+//            mOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+//        } else {
+//            mOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+//        }
+//        super.onResume();
+//    }
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        super.onConfigurationChanged(newConfig);
+        //this.setRequestedOrientation(mOrientation);
+        //apiChangeOrientation();
+        // 当新设置中，屏幕布局模式为横排时
+//        System.out.println("111111："+newConfig.orientation);
+//        if(newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
+//            System.out.println("111111横屏");
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    setScreenWidthAsHeight();      //
+//                }
+//            }, 1100);//尝试过直接使用post操作，在updatePopup函数中也能获取正确位置
+//        }else if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
+//            System.out.println("111111竖屏");
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    setScreenHeightAsHeight();    //
+//                }
+//            }, 1100);
+//        }
+    }
+//
+//    private void setScreenHeightAsHeight() {
+//        int heightPixels = getResources().getDisplayMetrics().widthPixels;
+//        System.out.println(",heightPixels:"+heightPixels);
+//        adapter.setScreenHeight(heightPixels);
+//        adapter.notifyItemInserted(0);
+//    }
+//
+//    private void setScreenWidthAsHeight() {
+//        int widthPixels = getResources().getDisplayMetrics().widthPixels;
+//        System.out.println("widthPixels:"+widthPixels);
+//        adapter.setScreenHeight(widthPixels);
+//        adapter.notifyItemInserted(0);
+//    }
+
+//    private void initScreen() {
+//        Display display = getWindowManager().getDefaultDisplay();
+//        int width = display.getWidth();
+//        int height = display.getHeight();
+//        if (width > height) {
+//            mOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE; // 横屏
+//        } else {
+//            mOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT; // 竖屏
+//        }
+//    }
 }
