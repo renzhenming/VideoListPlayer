@@ -1,5 +1,6 @@
 package com.waynell.videolist.demo.activity;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
@@ -8,19 +9,23 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.waynell.videolist.demo.R;
 import com.waynell.videolist.demo.holder.BaseViewHolder;
+import com.waynell.videolist.demo.holder.VideoViewHolder;
 import com.waynell.videolist.demo.holder.ViewHolderFactory;
 import com.waynell.videolist.demo.model.BaseItem;
 import com.waynell.videolist.demo.util.ItemUtils;
@@ -28,6 +33,7 @@ import com.waynell.videolist.visibility.calculator.SingleListViewItemActiveCalcu
 import com.waynell.videolist.visibility.items.ListItem;
 import com.waynell.videolist.visibility.scroll.ItemsProvider;
 import com.waynell.videolist.visibility.scroll.RecyclerViewItemPositionGetter;
+import com.waynell.videolist.widget.TextureVideoView;
 
 import java.util.List;
 
@@ -123,7 +129,7 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
                 return false;
             }
         });
-
+        startListener();
 
     }
 
@@ -267,11 +273,85 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
 //    }
 
 
+    private boolean mIsVideoSizeKnown;
+    private int mVideoHeight;
+    private int mVideoWidth;
+    private int mSurfaceViewWidth;
+    private int mSurfaceViewHeight;
+    int height = 0;
+    int width = 0;
+    private void VideoSizeChangedMethod(TextureVideoView videoView) {
+        if (videoView == null){
+            return;
+        }
+        MediaPlayer mMediaPlayer = videoView.getmMediaPlayer();
+        if (mMediaPlayer == null){
+            return;
+        }
+        height = mMediaPlayer.getVideoHeight();
+        width = mMediaPlayer.getVideoWidth();
+        if (width == 0 || height == 0) {
+            return;
+        }
 
+        mIsVideoSizeKnown = true;
+        mVideoHeight = height;
+        mVideoWidth = width;
+        int wid = mMediaPlayer.getVideoWidth();
+        int hig = mMediaPlayer.getVideoHeight();
+        // 根据视频的属性调整其显示的模式
+
+        if (wid > hig) {
+            if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        } else {
+            if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        mSurfaceViewWidth = dm.widthPixels;
+        mSurfaceViewHeight = dm.heightPixels;
+        if (width > height) {
+            // 竖屏录制的视频，调节其上下的空余
+
+            int w = mSurfaceViewHeight * width / height;
+            int margin = (mSurfaceViewWidth - w) / 2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(margin, 0, margin, 0);
+            //mSurfaceView.setLayoutParams(lp);
+            videoView.setLayoutParams(lp);
+        } else {
+            // 横屏录制的视频，调节其左右的空余
+
+            int h = mSurfaceViewWidth * height / width;
+            int margin = (mSurfaceViewHeight - h) / 2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(0, margin, 0, margin);
+            //mSurfaceView.setLayoutParams(lp);
+            videoView.setLayoutParams(lp);
+        }
+    }
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
         super.onConfigurationChanged(newConfig);
+        BaseViewHolder viewHolder = ViewHolderFactory.getViewHolder();
+        if (viewHolder instanceof VideoViewHolder){
+            VideoViewHolder holder = (VideoViewHolder)viewHolder;
+            TextureVideoView videoView = holder.getVideoView();
+            if (videoView != null){
+                VideoSizeChangedMethod(videoView);
+            }
+        }
+
+
         //this.setRequestedOrientation(mOrientation);
         //apiChangeOrientation();
         // 当新设置中，屏幕布局模式为横排时
@@ -319,4 +399,75 @@ public class RecyclerViewActivity extends AppCompatActivity implements View.OnCl
 //            mOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT; // 竖屏
 //        }
 //    }
+
+
+
+    private  OrientationEventListener mOrientationListener; // 屏幕方向改变监听器
+    private boolean mIsLand = false; // 是否是横屏
+    private boolean mClick = false; // 是否点击
+    private boolean mClickLand = true; // 点击进入横屏
+    private boolean mClickPort = true; // 点击进入竖屏
+
+
+    /**
+     * 开启监听器
+     */
+    private final void startListener() {
+        mOrientationListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int rotation) {
+
+                // 设置竖屏
+                if (((rotation >= 0) && (rotation <= 30)) || (rotation >= 330)) {
+//                    if (mClick) {
+//                        if (mIsLand && !mClickLand) {
+//                            return;
+//                        } else {
+//                            mClickPort = true;
+//                            mClick = false;
+//                            mIsLand = false;
+//                        }
+//                    } else {
+                        if (mIsLand) {
+                            System.out.println("aaaaa : 设置为竖屏");
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                            mIsLand = false;
+                            mClick = false;
+                        }
+//                    }
+                }
+                // 设置横屏
+                else if (((rotation >= 230) && (rotation <= 310))) {
+//                    BaseViewHolder viewHolder = ViewHolderFactory.getViewHolder();
+//                    if (viewHolder instanceof VideoViewHolder){
+//                        VideoViewHolder holder = (VideoViewHolder)viewHolder;
+//                        TextureVideoView videoView = holder.getVideoView();
+//                        if (videoView != null){
+//                            VideoSizeChangedMethod(videoView);
+//                        }
+//                    }
+//                    if (mClick) {
+//                        if (!mIsLand && !mClickPort) {
+//                            return;
+//                        } else {
+//                            mClickLand = true;
+//                            mClick = false;
+//                            mIsLand = true;
+//                        }
+//                    } else {
+                        if (!mIsLand) {
+                            System.out.println("aaaaa : 设置为横屏");
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                            mIsLand = true;
+                            mClick = false;
+                        }
+//                    }
+                }
+            }
+        };
+        mOrientationListener.enable();
+    }
+
+
+
 }

@@ -69,7 +69,7 @@ public class TextureVideoView extends TextureView
     private Uri mUri;
     private Context mContext;
     private Surface mSurface;
-    private MediaPlayer mMediaPlayer;
+    private static MediaPlayer mMediaPlayer;
     private AudioManager mAudioManager;
 
     private MediaPlayerCallback mMediaPlayerCallback;
@@ -506,12 +506,12 @@ public class TextureVideoView extends TextureView
 //                }
 //            });
 //        }
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                newVideoSizeChangedMethod(mp, width, height);
-            }
-        },1000);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                newVideoSizeChangedMethod(mp, width, height);
+//            }
+//        },1000);
 
     }
 
@@ -600,5 +600,9 @@ public class TextureVideoView extends TextureView
             });
         }
         return true;
+    }
+
+    public MediaPlayer getmMediaPlayer() {
+        return mMediaPlayer;
     }
 }

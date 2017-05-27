@@ -12,13 +12,16 @@ import com.waynell.videolist.demo.model.BaseItem;
  */
 public class ViewHolderFactory {
 
-    public static BaseViewHolder<? extends BaseItem> buildViewHolder(ViewGroup parent, int viewType,int height) {
+    private static VideoViewHolder viewHolder;
+
+    public static BaseViewHolder<? extends BaseItem> buildViewHolder(ViewGroup parent, int viewType, int height) {
         switch (viewType) {
             case BaseItem.VIEW_TYPE_VIDEO:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_list_item ,parent, false);
 //                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 //                layoutParams.height = height;
-                return new VideoViewHolder(view);
+                viewHolder = new VideoViewHolder(view);
+                return viewHolder;
 
             case BaseItem.VIEW_TYPE_PICTURE:
                 return new PicViewHolder(LayoutInflater.from(parent.getContext())
@@ -30,6 +33,10 @@ public class ViewHolderFactory {
                         .inflate(R.layout.text_list_item, parent, false));
 
         }
+    }
+
+    public static BaseViewHolder getViewHolder(){
+        return viewHolder;
     }
 
 }
